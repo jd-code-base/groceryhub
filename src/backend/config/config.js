@@ -10,10 +10,15 @@ const CONFIG = {
   PORT: process.env.PORT || 5000,
   REDIS_URI: process.env.REDIS_URI || "",
 
-  // EMAIL: {
-  //   USERNAME: process.env.USERNAME,
-  //   PASSWORD: process.env.PASSWORD,
-  // },
+  EMAIL: {
+    USERNAME: process.env.EMAIL_USERNAME,
+    PASSWORD: process.env.EMAIL_PASSWORD,
+  },
+
+  REDIS: {
+    USERNAME: process.env.UPSTASH_REDIS_REST_URL,
+    PASSWORD: process.env.UPSTASH_REDIS_REST_TOKEN,
+  },
 
   // JWT: {
   //   ACCESS_SECRET: process.env.ACCESS_TOKEN_SECRET || "default_access_secret",
