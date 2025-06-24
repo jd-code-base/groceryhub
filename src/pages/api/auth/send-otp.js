@@ -4,7 +4,7 @@ import ApiError from "@/backend/constants/apiError";
 import asyncHandler from "@/backend/constants/asyncHandler";
 import User from "@/backend/models/user.model";
 import { validateEmail } from "@/backend/validators/auth.validator";
-import { sendAuthEmail } from "@/utils/email/sendAuthEmail";
+import { sendAuthEmail } from "@/backend/utils/email/sendAuthEmail";
 import crypto from "crypto";
 
 const handler = asyncHandler(async (req, res) => {
@@ -26,9 +26,7 @@ const handler = asyncHandler(async (req, res) => {
     const msg =
       existingUser.loginMethod === "google"
         ? "This email is registered with Google login. Please continue with Google."
-        : existingUser.loginMethod === "github"
-          ? "This email is registered with GitHub login. Please continue with GitHub."
-          : "This email is already registered. Please log in or use a different email.";
+        : "This email is already registered. Please log in or use a different email.";
 
     throw ApiError.badRequest(msg);
   }
@@ -43,11 +41,9 @@ const handler = asyncHandler(async (req, res) => {
   const otp = crypto.randomInt(100000, 999999).toString();
   const hashedOtp = crypto.createHash("sha256").update(otp).digest("hex");
 
-  // Store hashed OTP and rate limit flag
-  await redisClient.setex(`otp:${email}`, 600, hashedOtp); // valid 10 min
-  await redisClient.setex(`otp:${email}:limit`, 60, "1"); // resend block for 1 min
+  await redisClient.setex(`otp:${email}`, 600, hashedOtp);
+  await redisClient.setex(`otp:${email}:limit`, 60, "1");
 
-  // Send OTP email
   await sendAuthEmail(email, otp, "register");
 
   return res.status(200).json({

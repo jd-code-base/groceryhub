@@ -1,16 +1,30 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { sendOtp, verifyOtp } from "@/utils/api/auth";
 
 export default function RegisterPage() {
+  const router = useRouter();
+
   const [email, setEmail] = useState("");
   const [otp, setOtp] = useState("");
   const [otpSent, setOtpSent] = useState(false);
-  const [verifying, setVerifying] = useState(false);
   const [sending, setSending] = useState(false);
+  const [verifying, setVerifying] = useState(false);
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
+  const [cooldown, setCooldown] = useState(0);
+
+  useEffect(() => {
+    let timer;
+    if (cooldown > 0) {
+      timer = setInterval(() => {
+        setCooldown((prev) => prev - 1);
+      }, 1000);
+    }
+    return () => clearInterval(timer);
+  }, [cooldown]);
 
   const handleSendOtp = async () => {
     if (!email || !/\S+@\S+\.\S+/.test(email)) {
@@ -24,11 +38,26 @@ export default function RegisterPage() {
       setSending(true);
       const res = await sendOtp(email);
       setOtpSent(true);
+      setCooldown(60);
       setMessage(res.message);
     } catch (err) {
       setError(err.message || "Failed to send OTP");
     } finally {
       setSending(false);
+    }
+  };
+
+  const handleResendOtp = async () => {
+    if (cooldown > 0) return;
+
+    try {
+      setError("");
+      setMessage("");
+      const res = await sendOtp(email);
+      setMessage("OTP resent successfully.");
+      setCooldown(60);
+    } catch (err) {
+      setError(err.message || "Failed to resend OTP");
     }
   };
 
@@ -38,7 +67,7 @@ export default function RegisterPage() {
       setMessage("");
       setVerifying(true);
       const res = await verifyOtp(email, otp);
-      setMessage(res.message);
+      router.push(`/register/details?email=${encodeURIComponent(email)}`);
     } catch (err) {
       setError(err.message || "Verification failed");
     } finally {
@@ -88,12 +117,23 @@ export default function RegisterPage() {
                 placeholder="Enter the OTP sent to your email"
               />
             </div>
+
             <button
               onClick={handleVerifyOtp}
               disabled={verifying}
               className="w-full bg-white text-blue-800 font-semibold py-2 mt-2 rounded-md hover:bg-blue-100 transition disabled:opacity-50"
             >
               {verifying ? "Verifying..." : "Verify OTP"}
+            </button>
+
+            <button
+              onClick={handleResendOtp}
+              disabled={cooldown > 0}
+              className="w-full text-sm text-blue-300 mt-3 hover:underline disabled:opacity-50"
+            >
+              {cooldown > 0
+                ? `Resend OTP in 00:${cooldown.toString().padStart(2, "0")}`
+                : "Resend OTP"}
             </button>
           </>
         )}

@@ -15,19 +15,18 @@ const CONFIG = {
     PASSWORD: process.env.EMAIL_PASSWORD,
   },
 
-  // JWT: {
-  //   ACCESS_SECRET: process.env.ACCESS_TOKEN_SECRET || "default_access_secret",
-  //   REFRESH_SECRET:
-  //     process.env.REFRESH_TOKEN_SECRET || "default_refresh_secret",
-  //   ACCESS_EXPIRATION: process.env.ACCESS_TOKEN_EXPIRATION || "15m",
-  //   REFRESH_EXPIRATION: process.env.REFRESH_TOKEN_EXPIRATION || "10d",
-  // },
+  JWT: {
+    ACCESS_SECRET: process.env.ACCESS_TOKEN_SECRET || "default_access_secret",
+    REFRESH_SECRET:
+      process.env.REFRESH_TOKEN_SECRET || "default_refresh_secret",
+    ACCESS_EXPIRATION: process.env.ACCESS_TOKEN_EXPIRATION || "15m",
+    REFRESH_EXPIRATION: process.env.REFRESH_TOKEN_EXPIRATION || "10d",
+  },
 
-  // COOKIE: {
-  //   DOMAIN: process.env.COOKIE_DOMAIN || "localhost",
-  //   SECURE: process.env.COOKIE_SECURE === "true",
-  //   SAME_SITE: process.env.NODE_ENV === "production" ? "None" : "Lax",
-  // },
+  COOKIE: {
+    SECURE: process.env.COOKIE_SECURE === "true",
+    SAME_SITE: process.env.NODE_ENV === "production" ? "None" : "Lax",
+  },
 
   // GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
 };

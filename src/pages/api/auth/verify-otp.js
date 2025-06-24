@@ -34,8 +34,8 @@ const handler = asyncHandler(async (req, res) => {
     throw ApiError.badRequest("OTP does not match");
   }
 
-  await redisClient.setex(`${otpKey}:verified`, 3600, "true"); // Mark verified for 1 hour
-  await redisClient.del(otpKey); // Clean up OTP
+  await redisClient.setex(`${otpKey}:verified`, 3600, "true");
+  await redisClient.del(otpKey);
 
   if (CONFIG.NODE_ENV === "development") {
     console.log(`[OTP Verified] ${email}`);
