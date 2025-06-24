@@ -10,7 +10,7 @@ export default function HomePage() {
   };
 
   return (
-    <main className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-[#0f172a] via-[#1e3a8a] to-[#0c4a6e] text-white">
+    <section className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-[#0f172a] via-[#1e3a8a] to-[#0c4a6e] text-white px-4">
       <h1 className="text-5xl font-bold mb-6 drop-shadow-lg text-center">
         Welcome to GroceryHub
       </h1>
@@ -20,6 +20,6 @@ export default function HomePage() {
       >
         Let's Go →
       </button>
-    </main>
+    </section>
   );
 }

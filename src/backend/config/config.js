@@ -15,11 +15,6 @@ const CONFIG = {
     PASSWORD: process.env.EMAIL_PASSWORD,
   },
 
-  REDIS: {
-    USERNAME: process.env.UPSTASH_REDIS_REST_URL,
-    PASSWORD: process.env.UPSTASH_REDIS_REST_TOKEN,
-  },
-
   // JWT: {
   //   ACCESS_SECRET: process.env.ACCESS_TOKEN_SECRET || "default_access_secret",
   //   REFRESH_SECRET:
