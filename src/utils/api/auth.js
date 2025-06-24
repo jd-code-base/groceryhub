@@ -24,3 +24,22 @@ export const completeRegistration = async ({
   });
   return res.data;
 };
+
+export const loginUser = async (payload) => {
+  const res = await api.post("/auth/login", payload);
+  return res.data;
+};
+
+export const logoutUser = async () => {
+  const res = await api.post("/auth/logout");
+  return res.data;
+};
+
+export const checkAuthStatus = async () => {
+  try {
+    const res = await api.get("/auth/me");
+    return res.data.success;
+  } catch (err) {
+    return false;
+  }
+};
